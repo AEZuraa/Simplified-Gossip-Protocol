@@ -1,0 +1,54 @@
+.App {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.circle {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin: 40px auto;
+  border-radius: 50%;
+  background-color: #f9f9f9;
+}
+
+.node {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-color: grey;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+}
+
+.node.active {
+  background-color: green;
+}
+
+.line {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: black;
+  animation: moveLine 2s linear forwards;
+}
+
+@keyframes moveLine {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(var(--to-left), var(--to-top));
+  }
+}
+
+.finished-message {
+  font-size: 24px;
+  color: green;
+  margin-top: 20px;
+}
