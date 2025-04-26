@@ -1,6 +1,8 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[russian,english]{babel}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{url}
 \usepackage{geometry}
 \geometry{top=2cm, bottom=2cm, left=2.5cm, right=2.5cm}
 \usepackage{titlesec}
@@ -31,7 +33,7 @@
     \vfill
     \textbf{Student Names: Arina Zimina, Karina Siniatullina,} \\[0.3cm]
     \textbf{Adelina Karavaeva, Egor Agapov} \\[0.5cm]
-    \textbf{Date: Final date!!!!!} \\[2cm]
+    \textbf{Date: 30.04.2025} \\[2cm]
     \vfill
 \end{titlepage}
 
@@ -41,6 +43,22 @@
 %     \item Почему важен для распределённых систем (например, Cassandra, DynamoDB)
 %     \item Примеры применения
 % \end{itemize}
+The \textbf{Gossip protocol} is a protocol that allows designing highly efficient, secure and low latency distributed communication systems (P2P). The inspiration for its design has been taken from studies on epidemic expansion and algorithms resulting from it. \\\\
+The gossip protocol is very important in distributed systems because it helps \textbf{nodes} (computers, servers, or processes) \textbf{share information quickly}, \textbf{reliably}, and \textbf{without a central coordinator}. Here’s why it’s critical:
+\begin{itemize}
+    \item \textbf{Scalability:} Gossip scales really well — even with thousands of nodes — because each node only talks to a few others at a time.
+    \item \textbf{Fault tolerance:} Nodes can fail or go offline, but gossip ensures the system can still spread information without depending on any single point.
+    \item \textbf{Eventually consistent:} Perfect synchronization is hard in distributed systems, so gossip allows nodes to eventually reach the same state without requiring immediate consistency.
+    \item \textbf{Low overhead:} The communication is lightweight and randomized, so it doesn’t overload the network.
+\end{itemize}
+
+\textbf{A few important use cases for gossip protocols:}
+\begin{enumerate}
+    \item \textbf{Membership tracking:} Nodes use gossip to find out which other nodes are alive, dead, or new in the system (example: Amazon DynamoDB).
+    \item \textbf{State dissemination:} Systems like Apache Cassandra use gossip to spread metadata (like schema changes, load info) across all nodes.
+    \item \textbf{Failure detection:} If a node crashes, gossip helps quickly alert the rest of the system so they can reroute traffic or rebalance data.
+    \item \textbf{Blockchain and cryptocurrency networks:} In Bitcoin, Ethereum, and other decentralized networks, gossip spreads new transactions and blocks across peers.
+\end{enumerate}
 
 \section{Methods}
 % \begin{itemize}
@@ -72,4 +90,8 @@
 %     \item Papers on Gossip protocols
 %     \item Статьи/блоги по симуляции
 % \end{itemize}
+
+\begin{enumerate}
+    \item What is the Gossip Protocol: \url{https://academy.bit2me.com/en/what-is-gossip-protocol/}
+\end{enumerate}
 \end{document}
