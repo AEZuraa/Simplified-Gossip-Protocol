@@ -1,14 +1,21 @@
-import axios from "axios";
+const BASE_URL = "http://localhost:8000";
 
-const BASE_URL = "http://localhost:8000"; // FastAPI сервер
+export async function startAlgorithm(nodesCount) {
+  const response = await fetch(`${BASE_URL}/start`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nodes_count: nodesCount }),
+  });
+  return await response.json();
+}
 
-export async function fetchRoundData(roundNumber) {
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/round/${roundNumber}`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
-      return null;
-    }
+export async function fetchRoundData(simulationId, roundNumber) {
+  try {
+    const response = await fetch(`${BASE_URL}/round/${simulationId}/${roundNumber}`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching round data:', error);
+    throw error;
   }
+}

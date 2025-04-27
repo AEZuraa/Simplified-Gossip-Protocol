@@ -1,29 +1,30 @@
-// src/components/NodeCircle.js
 import React from 'react';
 
-function NodeCircle({ x, y, label }) {
+const NodeCircle = ({ node, position }) => {
+  const getNodeColor = () => {
+    if (!node.alive) return '#7f8c8d'; // серый если не alive
+    if (node.has_message) return '#2ecc71'; // зеленый если получил сообщение
+    if (node.active) return '#3498db'; // синий если активен
+    return '#bdc3c7'; // светло-серый если просто alive
+  };
+
+  const getNodeText = () => {
+    if (!node.alive) return '💀';
+    return node.id.replace('Node ', '');
+  };
+
   return (
     <div
+      className="node"
       style={{
-        position: 'absolute',
-        top: `${y}px`,
-        left: `${x}px`,
-        width: '50px',
-        height: '50px',
-        backgroundColor: 'lightgray',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        color: 'black',
-        textAlign: 'center',
+        ...position,
+        backgroundColor: getNodeColor(),
       }}
+      title={node.has_message ? "Has the message" : "Doesn't have the message"}
     >
-      {label}
+      {getNodeText()}
     </div>
   );
-}
+};
 
 export default NodeCircle;
