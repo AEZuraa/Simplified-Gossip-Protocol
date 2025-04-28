@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict
+import os
 import random
 
 app = FastAPI()
@@ -27,9 +28,11 @@ async def start_algorithm(config: AlgorithmConfig):
         raise HTTPException(status_code=400, detail="At least 2 nodes required")
     
     simulation_id = str(random.randint(1000, 9999))
+    folder_path = os.path.join("logs", f"simulation-{simulation_id}")
+    os.makedirs(folder_path, exist_ok=True)
     gossip = GossipAlg(num_nodes = config.nodes_count)
     gossip.inject_data(config.start_id, {"message":config.message})
-    gossip.run_until_convergence()
+    gossip.run_until_convergence(simulation_id=simulation_id)
     rounds = gossip.history
     
     simulations[simulation_id] = {

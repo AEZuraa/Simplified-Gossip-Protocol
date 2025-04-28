@@ -10,6 +10,7 @@ class GossipAlg:
         self.stop = False #should we stop
         self.history = []
         self.converged = False
+        self.simulation_id = 0
         self._create_nodes(num_nodes)
 
     def _create_nodes(self, num_nodes):
@@ -111,10 +112,11 @@ class GossipAlg:
         ]
         return serialize_cluster_state(state)
 
-    def run_until_convergence(self, max_rounds=100):
+    def run_until_convergence(self, max_rounds=100, simulation_id = 0):
         """
         Run algorithm
         """
+        self.simulation_id = simulation_id
         while not self.converged and self.round < max_rounds:
             self.start_round()
 
@@ -129,5 +131,5 @@ class GossipAlg:
             "nodes": state,
             "messages": messages_in_round
         }
-        export_history(current_history, f"logs/{self.round}_round.json")
+        export_history(current_history, f"logs/simulation-{self.simulation_id}/{self.round}_round.json")
         self.history.append(current_history)

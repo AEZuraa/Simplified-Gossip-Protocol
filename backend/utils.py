@@ -1,8 +1,5 @@
 import json
 import random
-import os
-
-# LOG_DIR = os.path.join(os.getcwd(), "data", "logs")
 
 def export_history(history, filename="gossip_history.json"):
     """
