@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const NodeCircle = ({ node, position }) => {
-  const getNodeColor = () => {
-    if (!node.alive) return '#7f8c8d'; // серый если не alive
-    if (node.has_message) return '#2ecc71'; // зеленый если получил сообщение
-    if (node.active) return '#3498db'; // синий если активен
-    return '#bdc3c7'; // светло-серый если просто alive
-  };
+  const [currentColor, setCurrentColor] = useState('#bdc3c7');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!node.alive) {
+        setCurrentColor('#7f8c8d');
+      } else if (node.has_message) {
+        setCurrentColor('#2ecc71');
+      } else if (node.active) {
+        setCurrentColor('#3498db');
+      } else {
+        setCurrentColor('#bdc3c7');
+      }
+    }, 100); 
+
+    return () => clearTimeout(timer);
+  }, [node]);
 
   const getNodeText = () => {
     if (!node.alive) return '💀';
@@ -18,7 +29,8 @@ const NodeCircle = ({ node, position }) => {
       className="node"
       style={{
         ...position,
-        backgroundColor: getNodeColor(),
+        backgroundColor: currentColor,
+        transition: 'background-color 0.5s ease'
       }}
       title={node.has_message ? "Has the message" : "Doesn't have the message"}
     >

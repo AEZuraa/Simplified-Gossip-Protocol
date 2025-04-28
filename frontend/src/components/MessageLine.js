@@ -32,11 +32,15 @@ const MessageLine = ({ message, nodePositions, circleSize }) => {
         top: `${fromY}px`,
         width: `${length}px`,
         transform: `rotate(${angle}deg)`,
+        transition: 'all 0.3s ease' // Добавляем плавность
       }}
     >
       <div 
         className={`message-dot ${animated ? 'animated' : ''}`}
         title={`Message: ${message.message}`}
+        style={{
+          transition: 'all 0.3s ease' // Добавляем плавность
+        }}
       />
     </div>
   );

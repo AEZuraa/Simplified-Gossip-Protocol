@@ -61,8 +61,11 @@ function App() {
       const data = await loadRoundData(simulationId, currentRound);
       
       if (data) {
-        setNodes(Array.isArray(data.nodes) ? data.nodes : []);
         setMessages(Array.isArray(data.messages) ? data.messages : []);
+        
+        setTimeout(() => {
+          setNodes(Array.isArray(data.nodes) ? data.nodes : []);
+        }, 1500);
         
         if (data.finished) {
           setIsRunning(false);
@@ -171,9 +174,11 @@ function App() {
         </button>
       </div>
 
-      {currentRound && (
-        <h2>Round {currentRound} {isFinished && '(Finished)'}</h2>
-      )}
+      <div style={{ minHeight: '40px' }}>
+        {currentRound - 1 > 0 ? (
+          <h2>Round {currentRound - 1} {isFinished && '(Finished)'}</h2>
+        ) : null}
+      </div>
 
       <div className="visualization-container">
         <div className="circle" style={{ width: CIRCLE_SIZE, height: CIRCLE_SIZE }}>
