@@ -43,6 +43,7 @@
 %     \item Почему важен для распределённых систем (например, Cassandra, DynamoDB)
 %     \item Примеры применения
 % \end{itemize}
+
 The \textbf{Gossip protocol} is a protocol that allows designing highly efficient, secure and low latency distributed communication systems (P2P). The inspiration for its design has been taken from studies on epidemic expansion and algorithms resulting from it. \\\\
 The gossip protocol is very important in distributed systems because it helps \textbf{nodes} (computers, servers, or processes) \textbf{share information quickly}, \textbf{reliably}, and \textbf{without a central coordinator}. Here’s why it’s critical:
 \begin{itemize}
@@ -68,6 +69,57 @@ The gossip protocol is very important in distributed systems because it helps \t
 %     \item Диаграмма архитектуры (рисунок)
 %     \item Как считаем convergence, tolerance и пр.
 % \end{itemize}
+
+Our implementation of the Gossip Protocol consists of a modern web application with a clear separation between backend and frontend components. The system architecture is designed to be scalable, maintainable, and provides real-time visualization of the gossip protocol simulation.
+
+\subsection{Architecture}
+The project follows a client-server architecture:
+\begin{itemize}
+    \item \textbf{Backend:} Implemented in Python using FastAPI framework, providing RESTful API endpoints for simulation control and data retrieval
+    \item \textbf{Frontend:} Built with modern web technologies, offering an interactive visualization of the gossip protocol
+    \item \textbf{Communication:} REST API with CORS support for seamless frontend-backend interaction
+\end{itemize}
+
+\subsection{Simulation Implementation}
+The core simulation logic is implemented in the following components:
+\begin{itemize}
+    \item \textbf{Node Class:} Represents individual nodes in the network with properties for:
+        \begin{itemize}
+            \item Node identification
+            \item Data storage
+            \item Active/inactive states
+            \item Alive/dead states
+        \end{itemize}
+    \item \textbf{Gossip Algorithm:} Implements the core protocol with features:
+        \begin{itemize}
+            \item Random peer selection
+            \item Concurrent message exchange using threading
+            \item Fault tolerance simulation (5\% node failure probability)
+            \item Node recovery simulation (2\% recovery probability)
+            \item Convergence detection
+        \end{itemize}
+\end{itemize}
+
+\subsection{Convergence and Metrics}
+The system tracks several important metrics:
+\begin{itemize}
+    \item \textbf{Convergence:} Detected when all alive nodes have the same data
+    \item \textbf{Round History:} Each round's state is saved, including:
+        \begin{itemize}
+            \item Node states (active/inactive, alive/dead)
+            \item Message exchanges
+            \item Convergence status
+        \end{itemize}
+    \item \textbf{Simulation Logs:} Detailed JSON logs for each simulation round
+\end{itemize}
+
+\subsection{Tools and Technologies}
+\begin{itemize}
+    \item \textbf{Backend:} Python, FastAPI, threading
+    \item \textbf{Frontend:} Modern web stack (HTML, CSS, JavaScript)
+    \item \textbf{Development:} Git for version control
+    \item \textbf{Testing:} Dedicated test suite for protocol verification
+\end{itemize}
 
 \section{Results}
 % \begin{itemize}
