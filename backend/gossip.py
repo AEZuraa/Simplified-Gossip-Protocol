@@ -37,30 +37,43 @@ class GossipAlg:
 
         # shuffle nodes for random conversation
         nodes_list = [node for node in self.nodes if node.active]
-
         random.shuffle(nodes_list)
+
+        snapshot = {}
+        for node in nodes_list:
+            snapshot[node.id] = {
+                "active": node.active,
+                "alive": node.alive,
+                "has_message": bool(node.data)
+            }
 
         threads = []
 
         for node in nodes_list:
-            if simulate_node_failure(probability=0.01):  # kill node with prob 1%
+            state = snapshot[node.id]
+
+            if not state["alive"]:
                 node.kill()
                 continue
-            if not node.active and node.alive and simulate_node_recovery(probability=0.05):
-                node.wake_up()
-            if not node.active or not node.alive:
+
+            if not state["active"]:
+                if simulate_node_recovery(probability=0.05):
+                    node.wake_up()
                 continue
+
             peer = self._select_peer(node)
+
             if peer:
-                if node.data:
+                print(state)
+                if state["has_message"]:
                     messages_in_round.append({
                         "from": f"Node {node.id}",
                         "to": f"Node {peer.id}",
                         "message": node.data["message"]
                     })
-                t = threading.Thread(target=node.send_to, args=(peer,))
-                threads.append(t)
-                t.start()
+                    t = threading.Thread(target=node.send_to, args=(peer,))
+                    threads.append(t)
+                    t.start()
 
         for t in threads:
             t.join()
