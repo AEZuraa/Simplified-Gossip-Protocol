@@ -130,3 +130,14 @@ button:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
 }
+
+.input-group input[type="text"] {
+  padding: 5px;
+  width: 150px;
+}
+
+.input-group span {
+  font-size: 0.8em;
+  color: #666;
+  margin-left: 5px;
+}

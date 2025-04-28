@@ -15,11 +15,39 @@ function App() {
   const [simulationId, setSimulationId] = useState(null);
   const [nodePositions, setNodePositions] = useState([]);
   const [nodesCount, setNodesCount] = useState(4);
+  const [messageText, setMessageText] = useState('Hello Gossip!');
+  const [startNodeId, setStartNodeId] = useState(1);
 
   const loadRoundData = useCallback(async (simId, roundNumber) => {
     try {
       const data = await fetchRoundData(simId, roundNumber);
-      return data;
+      
+      // Преобразуем nodes в массив, если это необходимо
+      let nodesData = data?.nodes || [];
+      if (nodesData && !Array.isArray(nodesData)) {
+        if (typeof nodesData === 'string') {
+          try {
+            nodesData = JSON.parse(nodesData);
+          } catch (e) {
+            console.error('Error parsing nodes data:', e);
+            nodesData = [];
+          }
+        } else {
+          nodesData = Object.values(nodesData);
+        }
+      }
+
+      // Преобразуем messages в массив
+      let messagesData = data?.messages || [];
+      if (messagesData && !Array.isArray(messagesData)) {
+        messagesData = Object.values(messagesData);
+      }
+
+      return {
+        ...data,
+        nodes: nodesData,
+        messages: messagesData
+      };
     } catch (error) {
       console.error('Error loading round data:', error);
       throw error;
@@ -33,8 +61,8 @@ function App() {
       const data = await loadRoundData(simulationId, currentRound);
       
       if (data) {
-        setNodes(data.nodes || []);
-        setMessages(data.messages || []);
+        setNodes(Array.isArray(data.nodes) ? data.nodes : []);
+        setMessages(Array.isArray(data.messages) ? data.messages : []);
         
         if (data.finished) {
           setIsRunning(false);
@@ -54,12 +82,18 @@ function App() {
     setIsRunning(true);
     setIsFinished(false);
     setMessages([]);
+    setNodes([]);
     
     try {
-      const { simulation_id } = await startAlgorithm(nodesCount);
+      const selectedStartId = startNodeId > 0 ? startNodeId : Math.floor(Math.random() * nodesCount) + 1;
+      
+      const { simulation_id } = await startAlgorithm(
+        nodesCount,
+        selectedStartId,
+        messageText
+      );
       setSimulationId(simulation_id);
       
-      // Генерируем позиции узлов по кругу
       const positions = [];
       for (let i = 0; i < nodesCount; i++) {
         const angle = 2 * Math.PI * i / nodesCount;
@@ -79,6 +113,10 @@ function App() {
     }
   };
 
+  // Добавим проверку перед рендерингом
+  const safeNodes = Array.isArray(nodes) ? nodes : [];
+  const safeMessages = Array.isArray(messages) ? messages : [];
+
   return (
     <div className="App">
       <h1>Gossip Protocol Simulator</h1>
@@ -96,6 +134,34 @@ function App() {
             disabled={isRunning}
           />
         </div>
+
+        <div className="input-group">
+          <label htmlFor="message-text">Message:</label>
+          <input 
+            id="message-text"
+            type="text" 
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            disabled={isRunning}
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="start-node">Start Node ID:</label>
+          <input 
+            id="start-node"
+            type="number" 
+            min="1" 
+            max={nodesCount}
+            value={startNodeId}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              setStartNodeId(val > 0 && val <= nodesCount ? val : 1);
+            }}
+            disabled={isRunning}
+          />
+          <span>(0 for random)</span>
+        </div>
         
         <button 
           onClick={handleStartAlgorithm} 
@@ -111,7 +177,7 @@ function App() {
 
       <div className="visualization-container">
         <div className="circle" style={{ width: CIRCLE_SIZE, height: CIRCLE_SIZE }}>
-          {nodes.map((node) => {
+          {safeNodes.map((node) => {
             const position = nodePositions.find(p => p.id === node.id)?.position;
             return position ? (
               <NodeCircle 
@@ -122,7 +188,7 @@ function App() {
             ) : null;
           })}
 
-          {messages.map((message, idx) => (
+          {safeMessages.map((message, idx) => (
             <MessageLine
               key={`${message.from}-${message.to}-${idx}-${currentRound}`}
               message={message}

@@ -1,10 +1,14 @@
 const BASE_URL = "http://localhost:8000";
 
-export async function startAlgorithm(nodesCount) {
+export async function startAlgorithm(nodesCount, startId, message) {
   const response = await fetch(`${BASE_URL}/start`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nodes_count: nodesCount }),
+    body: JSON.stringify({ 
+      nodes_count: nodesCount,
+      start_id: startId,
+      message: message
+    }),
   });
   return await response.json();
 }
