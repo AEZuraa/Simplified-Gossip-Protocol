@@ -30,9 +30,9 @@ async def start_algorithm(config: AlgorithmConfig):
     simulation_id = str(random.randint(1000, 9999))
     folder_path = os.path.join("logs", f"simulation-{simulation_id}")
     os.makedirs(folder_path, exist_ok=True)
-    gossip = GossipAlg(num_nodes = config.nodes_count)
+    gossip = GossipAlg(num_nodes = config.nodes_count,simulation_id=simulation_id)
     gossip.inject_data(config.start_id, {"message":config.message})
-    gossip.run_until_convergence(simulation_id=simulation_id)
+    gossip.run_until_convergence()
     rounds = gossip.history
     
     simulations[simulation_id] = {

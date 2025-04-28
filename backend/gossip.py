@@ -4,13 +4,13 @@ import threading
 from utils import serialize_cluster_state, simulate_node_failure, simulate_node_recovery, export_history
 
 class GossipAlg:
-    def __init__(self, num_nodes) -> None:
+    def __init__(self, num_nodes, simulation_id) -> None:
         self.nodes = [] #all nodes
         self.round = 0 #num of round
         self.stop = False #should we stop
         self.history = []
         self.converged = False
-        self.simulation_id = 0
+        self.simulation_id = simulation_id
         self._create_nodes(num_nodes)
 
     def _create_nodes(self, num_nodes):
@@ -26,6 +26,7 @@ class GossipAlg:
         """
         if 1 <= node_id < len(self.nodes) + 1:
             self.nodes[node_id - 1].rec_from(data)
+        self._save_round_history(messages_in_round=[])
 
     def start_round(self):
         """
@@ -112,11 +113,10 @@ class GossipAlg:
         ]
         return serialize_cluster_state(state)
 
-    def run_until_convergence(self, max_rounds=100, simulation_id = 0):
+    def run_until_convergence(self, max_rounds=100):
         """
         Run algorithm
         """
-        self.simulation_id = simulation_id
         while not self.converged and self.round < max_rounds:
             self.start_round()
 
