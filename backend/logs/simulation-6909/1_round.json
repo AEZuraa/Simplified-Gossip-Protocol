@@ -1,0 +1,12 @@
+{
+    "round": 1,
+    "finished": false,
+    "nodes": "[\n    {\n        \"id\": \"Node 1\",\n        \"active\": true,\n        \"alive\": true,\n        \"has_message\": true\n    },\n    {\n        \"id\": \"Node 2\",\n        \"active\": true,\n        \"alive\": true,\n        \"has_message\": true\n    },\n    {\n        \"id\": \"Node 3\",\n        \"active\": true,\n        \"alive\": true,\n        \"has_message\": false\n    },\n    {\n        \"id\": \"Node 4\",\n        \"active\": true,\n        \"alive\": true,\n        \"has_message\": false\n    },\n    {\n        \"id\": \"Node 5\",\n        \"active\": true,\n        \"alive\": true,\n        \"has_message\": false\n    }\n]",
+    "messages": [
+        {
+            "from": "Node 1",
+            "to": "Node 2",
+            "message": "Hello World!"
+        }
+    ]
+}
