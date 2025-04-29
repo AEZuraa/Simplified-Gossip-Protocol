@@ -4,7 +4,7 @@ import NodeCircle from './components/NodeCircle';
 import MessageLine from './components/MessageLine';
 import './styles.css';
 
-const CIRCLE_SIZE = 500;
+
 
 function App() {
   const [currentRound, setCurrentRound] = useState(null);
@@ -119,19 +119,21 @@ function App() {
   // Добавим проверку перед рендерингом
   const safeNodes = Array.isArray(nodes) ? nodes : [];
   const safeMessages = Array.isArray(messages) ? messages : [];
-
-  return (
+  const baseSize = 400;
+  const extraSize = Math.max(0, nodesCount - 8) * 60;
+  const circleSize = baseSize + extraSize;
+    return (
     <div className="App">
       <h1>Gossip Protocol Simulator</h1>
-      
+
       <div className="controls">
         <div className="input-group">
           <label htmlFor="nodes-count">Nodes Count:</label>
-          <input 
+          <input
             id="nodes-count"
-            type="number" 
-            min="2" 
-            max="20" 
+            type="number"
+            min="2"
+            max="20"
             value={nodesCount}
             onChange={(e) => setNodesCount(Math.max(2, parseInt(e.target.value) || 2))}
             disabled={isRunning}
@@ -140,9 +142,9 @@ function App() {
 
         <div className="input-group">
           <label htmlFor="message-text">Message:</label>
-          <input 
+          <input
             id="message-text"
-            type="text" 
+            type="text"
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
             disabled={isRunning}
@@ -151,10 +153,10 @@ function App() {
 
         <div className="input-group">
           <label htmlFor="start-node">Start Node ID:</label>
-          <input 
+          <input
             id="start-node"
-            type="number" 
-            min="1" 
+            type="number"
+            min="1"
             max={nodesCount}
             value={startNodeId}
             onChange={(e) => {
@@ -165,9 +167,9 @@ function App() {
           />
           <span>(0 for random)</span>
         </div>
-        
-        <button 
-          onClick={handleStartAlgorithm} 
+
+        <button
+          onClick={handleStartAlgorithm}
           disabled={isRunning}
         >
           {isRunning ? 'Running...' : 'Start Algorithm'}
@@ -181,14 +183,14 @@ function App() {
       </div>
 
       <div className="visualization-container">
-        <div className="circle" style={{ width: CIRCLE_SIZE, height: CIRCLE_SIZE }}>
+        <div className="circle" style={{ width: `${circleSize}px`, height: `${circleSize}px` }}>
           {safeNodes.map((node) => {
             const position = nodePositions.find(p => p.id === node.id)?.position;
             return position ? (
-              <NodeCircle 
+              <NodeCircle
                 key={`${node.id}-${currentRound}`}
-                node={node} 
-                position={position} 
+                node={node}
+                position={position}
               />
             ) : null;
           })}
@@ -198,7 +200,7 @@ function App() {
               key={`${message.from}-${message.to}-${idx}-${currentRound}`}
               message={message}
               nodePositions={nodePositions}
-              circleSize={CIRCLE_SIZE}
+              circleSize={circleSize}
             />
           ))}
         </div>
