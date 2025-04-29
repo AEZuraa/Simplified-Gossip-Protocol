@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 const NodeCircle = ({ node, position }) => {
-  const [currentColor, setCurrentColor] = useState('#bdc3c7');
+  const [imagePath, setImagePath] = useState('/images/workspace_base.png');
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!node.alive) {
-        setCurrentColor('#7f8c8d');
+        setImagePath('/images/workspace_red.png');
       } else if (node.has_message) {
-        setCurrentColor('#2ecc71');
+        setImagePath('/images/workspace_green.png');
       } else if (node.active) {
-        setCurrentColor('#3498db');
+        setImagePath('/images/workspace_base.png');
       } else {
-        setCurrentColor('#bdc3c7');
+        setImagePath('/images/workspace_base.png');
       }
-    }, 100); 
+    }, 100);
 
     return () => clearTimeout(timer);
   }, [node]);
@@ -29,8 +29,9 @@ const NodeCircle = ({ node, position }) => {
       className="node"
       style={{
         ...position,
-        backgroundColor: currentColor,
-        transition: 'background-color 0.5s ease'
+        backgroundImage: `url(${imagePath})`,
+        backgroundSize: 'cover',
+        transition: 'background-image 0.5s ease'
       }}
       title={node.has_message ? "Has the message" : "Doesn't have the message"}
     >

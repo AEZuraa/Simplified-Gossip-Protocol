@@ -24,22 +24,56 @@ const MessageLine = ({ message, nodePositions, circleSize }) => {
   const length = Math.sqrt(dx * dx + dy * dy);
   const angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
+  //right-up
+  const flipX = dx > 0 && dy < 0 ? 1 : -1;
+  const flipY = dx > 0 && dy < 0 ? 1 : -1;
+
+  //right-down
+  const flipX2 = dx > 0 && dy > 0 ? 1 : -1;
+  const flipY2 = dx > 0 && dy > 0 ? 1 : -1;
+
+  //left-up
+  const flipX3 = dx < 0 && dy < 0 ? 1 : -1;
+  const flipY3 = dx < 0 && dy < 0 ? -1 : 1;
+
+  //left-down
+  const flipX4 = dx < 0 && dy > 0 ? 1 : 1;
+  const flipY4 = dx < 0 && dy > 0 ? -1 : 1;
+
+  let flipDirectionX = 1;
+  let flipDirectionY = 1;
+
+  if (dx > 0 && dy < 0) {
+    flipDirectionX = flipX;
+    flipDirectionY = flipY;
+  } else if (dx > 0 && dy > 0) {
+    flipDirectionX = flipX2;
+    flipDirectionY = flipY2;
+  } else if (dx < 0 && dy < 0) {
+    flipDirectionX = flipX3;
+    flipDirectionY = flipY3;
+  } else if (dx < 0 && dy > 0) {
+    flipDirectionX = flipX4;
+    flipDirectionY = flipY4;
+  }
+
   return (
-    <div 
+    <div
       className="message-line"
       style={{
         left: `${fromX}px`,
         top: `${fromY}px`,
         width: `${length}px`,
-        transform: `rotate(${angle}deg)`,
+        transform: `rotate(${angle}deg)`,  // Поворачиваем линию сообщения
         transition: 'all 0.3s ease' // Добавляем плавность
       }}
     >
-      <div 
+      <div
         className={`message-dot ${animated ? 'animated' : ''}`}
         title={`Message: ${message.message}`}
         style={{
-          transition: 'all 0.3s ease' // Добавляем плавность
+          transform: `scaleX(${flipDirectionX}) scaleY(${flipDirectionY})`, // Зеркалим спрайт
+          transition: 'all 0.3s ease',
         }}
       />
     </div>
