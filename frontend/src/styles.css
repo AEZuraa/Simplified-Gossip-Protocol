@@ -75,16 +75,21 @@
 
 .message-dot {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: #e74c3c;
+  width: 75px;
+  height: 75px;
+  background-image: url('/public/images/walking_character.gif');
+  background-size: cover;
   border-radius: 50%;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
   opacity: 0;
+  transition: all 0.3s ease;
 }
 
+.message-dot.animated {
+  opacity: 1;
+}
 .message-dot.animated {
   opacity: 1;
   animation: moveDot 1.5s linear forwards;
