@@ -50,6 +50,10 @@ class GossipAlg:
         threads = []
 
         for node in nodes_list:
+            if simulate_node_failure(probability=0.02):
+                node.kill()
+                continue
+            
             state = snapshot[node.id]
 
             if not state["alive"]:
