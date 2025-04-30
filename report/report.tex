@@ -33,7 +33,7 @@
     \vfill
     \textbf{Student Names: Arina Zimina, Karina Siniatullina,} \\[0.3cm]
     \textbf{Adelina Karavaeva, Egor Agapov} \\[0.5cm]
-    \textbf{Date: 29.04.2025} \\[2cm]
+    \textbf{Date: 30.04.2025} \\[2cm]
     \vfill
 \end{titlepage}
 
@@ -124,12 +124,42 @@ The system tracks several important metrics:
 
 \section{Results}
 
+\subsection{Interface}
+The initial interface of the algorithm looks simple and straightforward and allows you to select the number of nodes, the message to be exchanged and the node id of the node from which the algorithm will start executing.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/interface.jpeg}
+    \label{fig:screenshot1}
+\end{figure}
+
+\subsection{Algorithm visualization}
+At each round, the visualization shows the state of each node, the process of message exchange between specific nodes and the round number. If a message reaches a particular node, a green checkmark is displayed on the corresponding monitor.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/alg_visualisation.jpeg}
+    \label{fig:screenshot3}
+\end{figure}
+
+The completion of the algorithm looks like this:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/finished.jpeg}
+    \label{fig:screenshot4}
+\end{figure}
+
+A dead node during the algorithm process is marked with a red screen with a skull on it:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/node_dead.jpeg}
+    \label{fig:screenshot5}
+\end{figure}
+
 \subsection{Logs}
 Our logs are collected every round. At the beginning we write the number of the round, then a checkbox whether the exchange of information has been completed (final round), then a description of the state of each node in the algorithm and then a list of messages exchanged by the nodes in this round. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figures/logs.jpg}
-    \label{fig:screenshot1}
+    \label{fig:screenshot2}
 \end{figure}
 
 \section{Discussion}
@@ -138,8 +168,11 @@ Our logs are collected every round. At the beginning we write the number of the 
 \begin{itemize}
     \item The basic logic of the algorithm is fully implemented
     \item The ability to select the number of nodes in the algorithm has been implemented
-    \item At the end of each round, nodes generate comprehensible logs and share them among themselves
+    \item The visuals on the web page are hand-drawn
+    \item At the end of each round, comprehensible logs are generated
     \item A simple and clear web page design and interface has been implemented
+    \item Possibility to enter the message exchanged between nodes in the algorithm
+    \item Added the ability to select the node id of the node from which we start executing the algorithm
 \end{itemize}
 
 \subsection{What has not been achieved}
@@ -153,6 +186,7 @@ Despite these limitations, the core functionality of the project works reliably,
 \begin{itemize}
     \item \textbf{Scalability:} The current implementation could be optimized to better handle simulations involving hundreds or thousands of nodes, both in terms of performance and UI clarity.
     \item \textbf{Realism:} Introducing configurable network delays and message loss rates would make the simulation more realistic and useful for testing fault tolerance.
+    \item \textbf{Number of messages:} Add the ability to send multiple messages from different nodes as well as the ability to select the number of messages a node can send per round.
 \end{itemize}
 
 \section{References}
