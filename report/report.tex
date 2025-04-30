@@ -38,19 +38,14 @@
 \end{titlepage}
 
 \section{Introduction}
-% \begin{itemize}
-%     \item Что такое Gossip Protocol
-%     \item Почему важен для распределённых систем (например, Cassandra, DynamoDB)
-%     \item Примеры применения
-% \end{itemize}
 
 The \textbf{Gossip protocol} is a protocol that allows designing highly efficient, secure and low latency distributed communication systems (P2P). The inspiration for its design has been taken from studies on epidemic expansion and algorithms resulting from it. \\\\
-The gossip protocol is very important in distributed systems because it helps \textbf{nodes} (computers, servers, or processes) \textbf{share information quickly}, \textbf{reliably}, and \textbf{without a central coordinator}. Here’s why it’s critical:
+The gossip protocol is very important in distributed systems because it helps \textbf{nodes} (computers, servers, or processes) \textbf{share information quickly}, \textbf{reliably}, and \textbf{without a central coordinator}. Here's why it's critical:
 \begin{itemize}
     \item \textbf{Scalability:} Gossip scales really well — even with thousands of nodes — because each node only talks to a few others at a time.
     \item \textbf{Fault tolerance:} Nodes can fail or go offline, but gossip ensures the system can still spread information without depending on any single point.
     \item \textbf{Eventually consistent:} Perfect synchronization is hard in distributed systems, so gossip allows nodes to eventually reach the same state without requiring immediate consistency.
-    \item \textbf{Low overhead:} The communication is lightweight and randomized, so it doesn’t overload the network.
+    \item \textbf{Low overhead:} The communication is lightweight and randomized, so it doesn't overload the network.
 \end{itemize}
 
 \textbf{A few important use cases for gossip protocols:}
@@ -62,13 +57,6 @@ The gossip protocol is very important in distributed systems because it helps \t
 \end{enumerate}
 
 \section{Methods}
-% \begin{itemize}
-%     \item Какую архитектуру выбрали (backend + frontend)
-%     \item Как работает симуляция
-%     \item Какие инструменты и технологии
-%     \item Диаграмма архитектуры (рисунок)
-%     \item Как считаем convergence, tolerance и пр.
-% \end{itemize}
 
 Our implementation of the Gossip Protocol consists of a modern web application with a clear separation between backend and frontend components. The system architecture is designed to be scalable, maintainable, and provides real-time visualization of the gossip protocol simulation.
 
@@ -76,7 +64,13 @@ Our implementation of the Gossip Protocol consists of a modern web application w
 The project follows a client-server architecture:
 \begin{itemize}
     \item \textbf{Backend:} Implemented in Python using FastAPI framework, providing RESTful API endpoints for simulation control and data retrieval
-    \item \textbf{Frontend:} Built with modern web technologies, offering an interactive visualization of the gossip protocol
+    \item \textbf{Frontend:} Built with React.js, offering a modern, interactive user interface with:
+        \begin{itemize}
+            \item Real-time visualization of node states and message propagation
+            \item Interactive controls for simulation parameters
+            \item Animated transitions using Framer Motion for smooth node state changes
+            \item Responsive design for various screen sizes
+        \end{itemize}
     \item \textbf{Communication:} REST API with CORS support for seamless frontend-backend interaction
 \end{itemize}
 
@@ -94,8 +88,8 @@ The core simulation logic is implemented in the following components:
         \begin{itemize}
             \item Random peer selection
             \item Concurrent message exchange using threading
-            \item Fault tolerance simulation (5\% node failure probability)
-            \item Node recovery simulation (2\% recovery probability)
+            \item Fault tolerance simulation (1\% node failure probability)
+            \item Node recovery simulation (5\% recovery probability)
             \item Convergence detection
         \end{itemize}
 \end{itemize}
@@ -107,6 +101,7 @@ The system tracks several important metrics:
     \item \textbf{Round History:} Each round's state is saved, including:
         \begin{itemize}
             \item Node states (active/inactive, alive/dead)
+            \item Flagging whether the message has reached the node
             \item Message exchanges
             \item Convergence status
         \end{itemize}
@@ -116,34 +111,95 @@ The system tracks several important metrics:
 \subsection{Tools and Technologies}
 \begin{itemize}
     \item \textbf{Backend:} Python, FastAPI, threading
-    \item \textbf{Frontend:} Modern web stack (HTML, CSS, JavaScript)
+    \item \textbf{Frontend:} 
+        \begin{itemize}
+            \item React.js for component-based UI development
+            \item Framer Motion for smooth animations and transitions
+            \item Modern CSS for responsive design
+            \item WebSocket for real-time updates
+        \end{itemize}
     \item \textbf{Development:} Git for version control
     \item \textbf{Testing:} Dedicated test suite for protocol verification
 \end{itemize}
 
 \section{Results}
-% \begin{itemize}
-%     \item Скриншоты интерфейса
-%     \item Пример запуска симуляции
-%     \item Время сходимости (в графиках)
-%     \item Примеры логов
-% \end{itemize}
+
+\subsection{Interface}
+The initial interface of the algorithm looks simple and straightforward and allows you to select the number of nodes, the message to be exchanged and the node id of the node from which the algorithm will start executing.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/interface.jpeg}
+    \label{fig:screenshot1}
+\end{figure}
+
+\subsection{Algorithm visualization}
+At each round, the visualization shows the state of each node, the process of message exchange between specific nodes and the round number. If a message reaches a particular node, a green checkmark is displayed on the corresponding monitor.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/alg_visualisation.jpeg}
+    \label{fig:screenshot3}
+\end{figure}
+
+The completion of the algorithm looks like this:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/finished.jpeg}
+    \label{fig:screenshot4}
+\end{figure}
+
+A dead node during the algorithm process is marked with a red screen with a skull on it:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/node_dead.jpeg}
+    \label{fig:screenshot5}
+\end{figure}
+
+\subsection{Logs}
+Our logs are collected every round. At the beginning we write the number of the round, then a checkbox whether the exchange of information has been completed (final round), then a description of the state of each node in the algorithm and then a list of messages exchanged by the nodes in this round. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/logs.jpg}
+    \label{fig:screenshot2}
+\end{figure}
 
 \section{Discussion}
-% \begin{itemize}
-%     \item Что получилось
-%     \item Что не получилось
-%     \item Что можно улучшить: масштабируемость, UI, алгоритмы (например, оптимизация выбора пар)
-% \end{itemize}
+
+\subsection{What has been achieved}
+\begin{itemize}
+    \item The basic logic of the algorithm is fully implemented
+    \item The ability to select the number of nodes in the algorithm has been implemented
+    \item The visuals on the web page are hand-drawn
+    \item At the end of each round, comprehensible logs are generated
+    \item A simple and clear web page design and interface has been implemented
+    \item Possibility to enter the message exchanged between nodes in the algorithm
+    \item Added the ability to select the node id of the node from which we start executing the algorithm
+\end{itemize}
+
+\subsection{What has not been achieved}
+\begin{itemize}
+    \item We have not been able to deal with the comprehensibility and accessibility of the web interface for a large number of nodes (e.g. starting from 100)
+    \item It was not possible for us to implement data transmission simulating real network delays
+\end{itemize}
+Despite these limitations, the core functionality of the project works reliably, and the simulation successfully demonstrates the intended behavior of the gossip protocol. The project serves as a solid foundation for further improvements and scaling.
+
+\subsection{What could be improved}
+\begin{itemize}
+    \item \textbf{Scalability:} The current implementation could be optimized to better handle simulations involving hundreds or thousands of nodes, both in terms of performance and UI clarity.
+    \item \textbf{Realism:} Introducing configurable network delays and message loss rates would make the simulation more realistic and useful for testing fault tolerance.
+    \item \textbf{Number of messages:} Add the ability to send multiple messages from different nodes as well as the ability to select the number of messages a node can send per round.
+\end{itemize}
 
 \section{References}
-% \begin{itemize}
-%     \item Документация Cassandra
-%     \item Papers on Gossip protocols
-%     \item Статьи/блоги по симуляции
-% \end{itemize}
 
 \begin{enumerate}
     \item What is the Gossip Protocol: \url{https://academy.bit2me.com/en/what-is-gossip-protocol/}
+    \item To visualize people in the algorithm: \url{https://codepen.io/MAW/full/RaXRdE/}
+    \item Gossip Protocol: \url{https://en.wikipedia.org/wiki/Gossip_protocol}
+    \item Gossip Protocol implementation: \url{https://hyperledger-fabric.readthedocs.io/ru/latest/gossip.html}
+    \item The basic idea behind the Gossip Protocol: \url{https://neerc.ifmo.ru/wiki/index.php?title=Gossip-протоколы}
+    \item FastAPI Documentation: \url{https://fastapi.tiangolo.com}
+    \item React Documentation: \url{https://react.dev}
+    \item CSS Animations: \url{https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations}
+    \item Motion Animation Library: \url{https://motion.dev}
 \end{enumerate}
 \end{document}
