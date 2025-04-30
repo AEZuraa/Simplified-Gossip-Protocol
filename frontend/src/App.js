@@ -21,7 +21,7 @@ function App() {
   const loadRoundData = useCallback(async (simId, roundNumber) => {
     try {
       const data = await fetchRoundData(simId, roundNumber);
-      
+
       // Преобразуем nodes в массив, если это необходимо
       let nodesData = data?.nodes || [];
       if (nodesData && !Array.isArray(nodesData)) {
@@ -59,17 +59,19 @@ function App() {
 
     const processRound = async () => {
       const data = await loadRoundData(simulationId, currentRound);
-      
+
       if (data) {
         setMessages(Array.isArray(data.messages) ? data.messages : []);
-        
+
         setTimeout(() => {
           setNodes(Array.isArray(data.nodes) ? data.nodes : []);
         }, 1500);
-        
+
         if (data.finished) {
           setIsRunning(false);
-          setIsFinished(true);
+          setTimeout(() => {
+            setIsFinished(true);
+          }, 2000); // 1.5s анимация + 0.5s запас
         } else {
           setTimeout(() => {
             setCurrentRound(prev => prev + 1);
@@ -86,29 +88,29 @@ function App() {
     setIsFinished(false);
     setMessages([]);
     setNodes([]);
-    
+
     try {
       const selectedStartId = startNodeId > 0 ? startNodeId : Math.floor(Math.random() * nodesCount) + 1;
-      
+
       const { simulation_id } = await startAlgorithm(
         nodesCount,
         selectedStartId,
         messageText
       );
       setSimulationId(simulation_id);
-      
+
       const positions = [];
       for (let i = 0; i < nodesCount; i++) {
         const angle = 2 * Math.PI * i / nodesCount;
         const x = 50 + 40 * Math.cos(angle);
         const y = 50 + 40 * Math.sin(angle);
         positions.push({
-          id: `Node ${i+1}`,
+          id: `Node ${i + 1}`,
           position: { top: `${y}%`, left: `${x}%` }
         });
       }
       setNodePositions(positions);
-      
+
       setCurrentRound(1);
     } catch (error) {
       console.error('Error starting algorithm:', error);
@@ -122,7 +124,7 @@ function App() {
   const baseSize = 400;
   const extraSize = Math.max(0, nodesCount - 8) * 60;
   const circleSize = baseSize + extraSize;
-    return (
+  return (
     <div className="App">
       <h1>Gossip Protocol Simulator</h1>
 
