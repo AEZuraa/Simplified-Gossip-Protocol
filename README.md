@@ -6,19 +6,22 @@ The Gossip protocol is a protocol that allows designing highly efficient, secure
 
 ## Features
 - Node-to-node gossip simulation
-- Tracking of convergence and message count
-- Visual graph of state propagation
-- Tolerance to missing or slow nodes
+- Displaying a simulation of each round of messaging
+- Visualization of the entire simulation process
+- Tolerance to dead nodes
 
 ## Installation
 
+Type the following in the terminal of the project root folder:
 ```bash
+chmod +x run.sh
 ./run.sh
 ```
-Open ```frontend/index.html``` in browser.
+Then open ```http://localhost:3000``` in browser.
 
 ## Usage
 
-1. Submit data to a node
-2. Click "Next Round"
-3. Observe data propagation
+1. Select the number of nodes in the simulation
+2. Select the message to send to the other nodes
+3. Select the node id of the node from which the simulation will start
+4. Observe the simulation process
