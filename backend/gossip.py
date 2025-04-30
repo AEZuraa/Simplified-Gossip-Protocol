@@ -4,13 +4,13 @@ import threading
 from utils import serialize_cluster_state, simulate_node_failure, simulate_node_recovery, export_history
 
 class GossipAlg:
-    def __init__(self, num_nodes) -> None:
+    def __init__(self, num_nodes, simulation_id) -> None:
         self.nodes = [] #all nodes
         self.round = 0 #num of round
         self.stop = False #should we stop
         self.history = []
         self.converged = False
-        self.simulation_id = 0
+        self.simulation_id = simulation_id
         self._create_nodes(num_nodes)
 
     def _create_nodes(self, num_nodes):
@@ -26,6 +26,7 @@ class GossipAlg:
         """
         if 1 <= node_id < len(self.nodes) + 1:
             self.nodes[node_id - 1].rec_from(data)
+        self._save_round_history(messages_in_round=[])
 
     def start_round(self):
         """
@@ -36,30 +37,47 @@ class GossipAlg:
 
         # shuffle nodes for random conversation
         nodes_list = [node for node in self.nodes if node.active]
-
         random.shuffle(nodes_list)
+
+        snapshot = {}
+        for node in nodes_list:
+            snapshot[node.id] = {
+                "active": node.active,
+                "alive": node.alive,
+                "has_message": bool(node.data)
+            }
 
         threads = []
 
         for node in nodes_list:
-            if simulate_node_failure(probability=0.01):  # kill node with prob 1%
+            if simulate_node_failure(probability=0.02):
                 node.kill()
                 continue
-            if not node.active and node.alive and simulate_node_recovery(probability=0.05):
-                node.wake_up()
-            if not node.active or not node.alive:
+            
+            state = snapshot[node.id]
+
+            if not state["alive"]:
+                node.kill()
                 continue
+
+            if not state["active"]:
+                if simulate_node_recovery(probability=0.05):
+                    node.wake_up()
+                continue
+
             peer = self._select_peer(node)
+
             if peer:
-                if node.data:
+                print(state)
+                if state["has_message"]:
                     messages_in_round.append({
                         "from": f"Node {node.id}",
                         "to": f"Node {peer.id}",
                         "message": node.data["message"]
                     })
-                t = threading.Thread(target=node.send_to, args=(peer,))
-                threads.append(t)
-                t.start()
+                    t = threading.Thread(target=node.send_to, args=(peer,))
+                    threads.append(t)
+                    t.start()
 
         for t in threads:
             t.join()
@@ -112,11 +130,10 @@ class GossipAlg:
         ]
         return serialize_cluster_state(state)
 
-    def run_until_convergence(self, max_rounds=100, simulation_id = 0):
+    def run_until_convergence(self, max_rounds=100):
         """
         Run algorithm
         """
-        self.simulation_id = simulation_id
         while not self.converged and self.round < max_rounds:
             self.start_round()
 
